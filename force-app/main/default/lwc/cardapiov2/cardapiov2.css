@@ -1,0 +1,71 @@
+.menu{
+    height: 10vh;
+    background-color: #063970;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: stretch;
+}
+
+.body{
+    height: 83vh;
+}
+
+.footer{
+    height: 7vh;
+    background-color: #154C79;
+}
+
+h2{
+    color: #063970;
+}
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    background: #6C7A89;
+    
+}
+.box {
+    width: 300px;
+    height: 300px;
+    background: #fff;
+}
+
+.sections{
+    /* display: flex;
+    flex-direction: row;
+    justify-content: space-evenly; */
+    height: 50%;
+    width: 100%;
+    /* padding: inherit;
+    align-content: flex-start;
+    flex-wrap: nowrap; */
+}
+
+.sectionItem{
+    width: 30%;
+    height: 70%;
+    background-color: rgb(217, 217, 217);
+    border-radius: 10px;
+    border-color: rgb(217, 217, 217);
+    border-style: solid;
+    border-width: 5px;
+}
+
+.sectionImage {
+    /* background-image: url(https://unip2-dev-ed.file.force.com/sfc/servlet.shepherd/version/renditionDownload?rendition=ORIGINAL_Jpg&versionId=0688Z00000TOX57QAH&operationContext=CHATTER&contentId=05T8Z00001kuBQJ); */
+    display: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    width: 100%;
+    height: 80%;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.c__fontWeightTitle {
+    font-weight: 400;
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Minhas_Declara_es_de_fundos_do_parceiro</fullName>
+    <filterScope>Mine</filterScope>
+    <label>Minhas Declarações de fundos do parceiro</label>
+</ListView>

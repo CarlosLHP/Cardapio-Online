@@ -1,0 +1,30 @@
+.item{
+    border: solid;
+}
+
+.hightlayout{
+    height: 75vh;
+}
+
+.longBar {
+    width: 250px;
+    height: 100vh; /* Note a medida */
+    background-color: rgb(66, 79, 90);
+}
+
+.container {
+    height: 95vh;
+    width: 95vw;
+}
+
+.slds-card__body--inner, .slds-card__body_inner{
+    height: 77vh;
+}
+
+footer{
+    height: 0%;
+    bottom: 0;
+    align-content: center;
+    align-self: baseline;
+}
+

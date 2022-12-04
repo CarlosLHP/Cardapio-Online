@@ -1,0 +1,160 @@
+<template>
+    <!-- HEADER -->
+    <div class="menu">
+        <lightning-layout multiple-rows>
+            <lightning-layout-item size="12" small-device-size="4" medium-device-size="4" large-device-size="4">
+                <div class="slds-align_absolute-center" style="height: 8vh;">
+                    <lightning-button variant="base" label="Chamar Garçom" title="Looks like a link" onclick={callWaiter} class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="4" medium-device-size="4" large-device-size="4">
+                <div class="slds-align_absolute-center" style="height: 8vh;">
+                    <lightning-button variant="base" label="Inicio" title="Looks like a link" onclick={handleInit} class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item size="12" small-device-size="4" medium-device-size="4" large-device-size="4">
+                <div class="slds-align_absolute-center" style="height: 8vh;">
+                    <lightning-button variant="base" label="Pedir conta" title="Looks like a link" onclick={handleGetRequests} class="slds-m-left_x-small"></lightning-button>
+                </div>
+            </lightning-layout-item>
+        </lightning-layout>
+    </div>
+    <!-- BODY -->
+    <div class="body">
+
+        <template if:true={showInit}>
+            <div class="slds-align_absolute-center slds-text-heading_large" style="height: 10%;" if:true={isLoading}>
+                <h1 style="color:#154C79;" class="slds-border_bottom"><b>Categorias</b></h1>
+            </div>
+
+            <lightning-layout multiple-rows style="height: 90%;">
+                <template if:true={listSections} for:each={listSections} for:item="section" for:index="index">
+                    <lightning-layout-item key={section.Id} size="12" padding="around-small" small-device-size="4" medium-device-size="4" 
+                    large-device-size="4" style="height: 50%;">
+                        <span key={section.Id} class="custom-box" onclick={handleSection} style="height:100%; width: 100%;" data-id={section.Id}>
+                            <div style={section.style__c} class="sectionImage" data-id={section.Id}></div>
+                            <!-- <img src="/sfc/servlet.shepherd/version/download/0688Z00000UzmllQAB" alt="img"> -->
+                            <div class="slds-align_absolute-center" style="height: 20%; background-color: rgb(217, 217, 217);" data-id={section.Id}>
+                                <h1 style="color: #154C79;" data-id={section.Id}>{section.Name}</h1>
+                            </div>
+                        </span>
+                    </lightning-layout-item>
+                </template>
+
+            </lightning-layout>
+            
+        </template>
+        
+        <template if:false={showInit}>
+            <div class="slds-align_absolute-center slds-text-heading_large" style="height: 8%; background-color: #154C79;" if:true={isLoading}>
+                {categorySelected.Name}
+            </div>
+        
+            <div style="height: 92%; display: flex; overflow-x: auto;" class="">
+                <template if:true={isLoading} for:each={listProducts} for:item="product" for:index="index" onclick={addItem} data-id={product.Id}>
+                   <div key={product.Id} style="height: auto; min-width: 33.33%; background-color: rgb(217, 217, 217); border-radius: 7px;" class="slds-m-horizontal_medium slds-m-bottom_x-large slds-m-top_medium" data-id={product.Id}>
+                        <div class="sectionImage" data-id={product.Id} style={product.style}></div>
+                        <div class="slds-align_absolute-center slds-text-heading_large" style="align-items: center; height: 10%;" data-id={product.Id} >
+                            <h2>{product.Name} - R$ {product.Price__c}</h2>
+                        </div>
+                        <div onclick={addItem} data-id={product.Id} class="slds-align_absolute-center" style ="align-items: center; height: 10%; background-color: green; border-bottom-left-radius: 7px;
+                        border-bottom-right-radius: 7px;">
+                            <h1 data-id={product.Id} style="color: white;">Adicionar</h1>
+                        </div>
+                   </div>
+                </template>
+            </div>
+        </template>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer slds-align_absolute-center"  onclick={openModal}>
+        <h1 style="color: white;">Visualizar Itens no pedido</h1>
+    </div>
+
+    <template if:true={showModal}>
+        <section role="dialog" tabindex="-1" aria-labelledby="Modal"  aria-modal="true" aria-describedby="modal-content" class="slds-modal slds-fade-in-open slds-modal_medium c_partner_info_modal">
+            <div class="slds-modal__container c__modalContainer">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" title="Close" variant="inverse" size="medium"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate c__fontWeightTitle">Itens no pedido</h2>
+                </header>
+                <div class="c__modalvisible slds-modal__content slds-p-around_medium" id="modal-content" style="min-height: 20%;">
+                    <template if:true={isloadingModal}>
+                        <div class="slds-is-relative">
+                            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+                        </div>
+                    </template>
+                    <template if:false={isloadingModal}>
+                        <lightning-datatable
+                        key-field="id"
+                        data={cart}
+                        hide-checkbox-column
+                        columns={columns}
+                        onrowaction={handleRowAction}
+                        style="background-color: red;">
+                       </lightning-datatable>
+                    </template>
+                </div>
+                <div class="slds-modal__footer">
+                    <!-- <div><h2>Valor do pedido: {totalPrice}</h2></div>
+                    <lightning-button variant="destructive-text" label="Cancelar" title="Destructive action with a lighter look" onclick={closeModal} class="slds-m-left_x-small"></lightning-button>
+                    <lightning-button class="slds-m-left_medium" variant="success" label="Confirmar" title="titleName" onclick={HandlecreateRequest} disabled={disableConfirmRequest}></lightning-button> -->
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" padding="around-small" small-device-size="6" medium-device-size="6" large-device-size="6" >
+                            <div class="slds-text-align_left"><h1 style="color: black;">Valor do pedido: R$ {totalPrice}</h1></div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" padding="around-small" small-device-size="6" medium-device-size="6" large-device-size="6">
+                            <lightning-button variant="destructive-text" label="Cancelar" title="Destructive action with a lighter look" onclick={closeModal} class="slds-m-left_x-small"></lightning-button>
+                            <lightning-button class="slds-m-left_medium" variant="success" label="Confirmar" title="titleName" onclick={HandlecreateRequest} disabled={disableConfirmRequest}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <div if:true={showRequests} class="custom-modal">
+        <section role="dialog" tabindex="-1" aria-labelledby="Modal"  aria-modal="true" aria-describedby="modal-content" class="slds-modal slds-fade-in-open slds-modal_medium c_partner_info_modal">
+            <div class="slds-modal__container c__modalContainer">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closedRequest}>
+                        <lightning-icon icon-name="utility:close" alternative-text="Close" title="Close" variant="inverse" size="medium"></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 class="slds-text-heading_medium slds-hyphenate c__fontWeightTitle">Pedidos realizados</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div if:true={emptyRequests}>
+                        <p style="color: black;">Lista de pedidos vazia.</p>
+                    </div>
+                    <div if:false={emptyRequests}>
+                        <lightning-datatable
+                            key-field="id"
+                            data={listRequests}
+                            hide-checkbox-column
+                            columns={requestColumns}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+                <div class="slds-modal__footer">
+                    <lightning-layout multiple-rows>
+                        <lightning-layout-item size="12" padding="around-small" small-device-size="6" medium-device-size="6" large-device-size="6" >
+                            <div class="slds-text-align_left"><h1 style="color: black;">Valor total dos pedidos: R$ {totalPriceRequests}</h1></div>
+                        </lightning-layout-item>
+                        <lightning-layout-item size="12" padding="around-small" small-device-size="6" medium-device-size="6" large-device-size="6">
+                            <lightning-button variant="destructive-text" label="Voltar" title="Destructive action with a lighter look" onclick={closedRequest} class="slds-m-left_x-small"></lightning-button>
+                            <lightning-button class="slds-m-left_medium" variant="success" label="Pedir conta" title="titleName" onclick={handleClosedRequets} disabled={emptyRequests}></lightning-button>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</template>

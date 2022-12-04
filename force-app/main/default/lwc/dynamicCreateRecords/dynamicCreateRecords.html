@@ -1,0 +1,17 @@
+<template>
+    <lightning-card  variant="Narrow"  title="Solicitações" icon-name="standard:account">
+        
+        <lightning-button variant="brand" label="Solicitar evento" 
+        title="Primary action" onclick={handleClick} class="slds-m-left_x-small" slot="actions"></lightning-button>
+    </lightning-card>
+
+    <div if:true={isLoadingModal}>
+        <c-modal-record-edit-form
+        title={title}
+        object-api-name={objectApiName}
+        record-type-name={recordTypeName}
+        onclosedmodal={closedModal}
+        >
+        </c-modal-record-edit-form>
+    </div>
+</template>

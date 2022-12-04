@@ -1,0 +1,47 @@
+<template>
+    <lightning-spinner alternative-text="Loading" size="large" if:false={isLoading}>
+
+    </lightning-spinner>
+    <div class="custom-modal" if:true={isLoading}>
+        <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <a class="slds-modal__close slds-has-blur-focus" onclick={handleClosedModal}>
+                        <lightning-icon icon-name="utility:close" variant="inverse" alternative-text="close" ></lightning-icon>
+                    </a>
+                    <h2 class="slds-text-heading_medium slds-hyphenate">{title}</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <lightning-record-edit-form
+                            object-api-name={objectApiName}
+                            onsuccess={handleSuccess}
+                            record-type-id={recordTypeId}
+                            >
+                            <template if:true={sections} for:each={sections} for:item="section" for:index="index">
+                                <h3 key={section.id} class="slds-section__title slds-theme_shade">
+                                    <span class="slds-truncate slds-p-horizontal_small" title="Section Title">{section.heading}</span>
+                                </h3>
+                                <template if:true={section.layoutRows} for:each={section.layoutRows} for:item="layoutRow" for:index="index">
+                                    <div key={layoutRow.id}>
+                                        <template  if:true={layoutRow.layoutItems} for:each={layoutRow.layoutItems} for:item="layoutItem" for:index="index">
+                                            <div key={layoutItem.id}>
+                                                <template  if:true={layoutItem.layoutComponents} for:each={layoutItem.layoutComponents} for:item="field" for:index="index">
+                                                    <div key={field.id}>
+                                                        <lightning-input-field field-name={field.apiName}></lightning-input-field>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                            </template>
+                        <lightning-messages></lightning-messages>
+                        <lightning-button type="submit" label="Salvar" class="slds-float_right slds-p-right_xx-small"></lightning-button>
+                        <lightning-button  title="Cancel" label="Cancelar" class="slds-float_right slds-p-right_medium" onclick={handleClosedModal}></lightning-button>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </div>
+</template>

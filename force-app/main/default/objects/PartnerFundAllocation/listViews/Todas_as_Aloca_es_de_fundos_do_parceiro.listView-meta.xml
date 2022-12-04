@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Todas_as_Aloca_es_de_fundos_do_parceiro</fullName>
+    <filterScope>Everything</filterScope>
+    <label>Todas as Alocações de fundos do parceiro</label>
+</ListView>
